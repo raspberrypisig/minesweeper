@@ -1,0 +1,83 @@
+.grid {
+  display: -ms-grid;
+  -ms-grid-columns: repeat(16, 1fr);
+  -ms-grid-rows: auto;
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
+  grid-template-rows: auto;
+  
+}
+.grid__item::before {
+  content: "";
+  display: block;
+  padding-top: 100%;
+}
+
+body .grid label {
+
+  /*border: 4px purple;*/
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  background-color: #212121;
+}
+body .grid {
+  max-width: 800px;
+  margin: 30px auto;
+  box-sizing: border-box;
+  border: 10px solid #2a351f;
+}
+body .grid__item {
+  /*background-color: #eeedd3;*/
+  background: #c0c0c0;
+  border: 2px outset #ececec;
+  transition: all 400ms linear;
+}
+
+
+#c1:active ~ .grid #s1 {
+  /*transform: scale(0.90);*/
+  /*
+  border: 5px solid green;
+    margin: 0;  
+  transform: scale(1.1);
+  */
+}
+
+
+#c1:checked ~ .grid #s1 {
+  background-color: green;
+  /*
+  border-top:  2px solid rgb(128,128,128);
+  border-right: 2px solid rgb(128,128,128);;
+  border-bottom: 2px solid rgb(128,128,128);
+  border-left:  2px solid rgb(128,128,128);
+  */
+  
+  margin: 0px;  
+  transform: scale(1.0);
+
+}
+
+#c2:checked ~ .grid #s2 {
+  background-color: green;
+  /*border-top:  2px solid rgb(128,128,128);
+  border-right: 2px solid rgb(128,128,128);
+  border-bottom: 2px solid rgb(128,128,128);
+  border-left:  none;*/
+  margin: 0px;
+  transform: scale(1.0);
+}
+
+/*
+input {
+  visibility: hidden;
+  position: absolute;
+  top: -99px;
+  left: -99px;
+}
+*/
+
+
