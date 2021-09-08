@@ -30,7 +30,7 @@ impl Component for Model {
                 ConsoleService::log(&x.to_string());
                 // the value has changed so we need to
                 // re-render for it to appear on the page
-                true
+                false
             }
         }
     }
