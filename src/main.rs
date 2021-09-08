@@ -1,7 +1,8 @@
 use yew::prelude::*;
+use yew::services::ConsoleService;
 
 enum Msg {
-    AddOne,
+    CellClicked(u16),
 }
 
 struct Model {
@@ -24,8 +25,9 @@ impl Component for Model {
 
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
         match msg {
-            Msg::AddOne => {
+            Msg::CellClicked(x) => {
                 self.value += 1;
+                ConsoleService::log(&x.to_string());
                 // the value has changed so we need to
                 // re-render for it to appear on the page
                 true
@@ -56,13 +58,13 @@ impl Component for Model {
 }
 
 impl Model {
-    fn view_hidden_checkbox(&self, idx: usize) -> Html{
+    fn view_hidden_checkbox(&self, idx: u16) -> Html{
 
     let maybe_id = Some(format!("c{}", idx));
     let name_id = Some(format!("c{}", idx));
 
      html!{
-        <input type="checkbox" id=maybe_id  name=name_id />
+        <input type="checkbox" id=maybe_id  name=name_id onclick=self.link.callback(move |_| Msg::CellClicked(idx)) />
      }
     }
 
