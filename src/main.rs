@@ -1,6 +1,12 @@
 use yew::prelude::*;
 use yew::services::ConsoleService;
 
+const MATRIX_WIDTH: usize = 16;
+const MATRIX_HEIGHT: usize = 16;
+const PANEL_WIDTH: usize = 6;
+const PANEL_HEIGHT: usize = 2;
+const LED_COUNT: usize = MATRIX_WIDTH * MATRIX_HEIGHT * PANEL_WIDTH * PANEL_HEIGHT;
+
 enum Msg {
     CellClicked(u16),
 }
@@ -10,7 +16,9 @@ struct Model<T> {
     // It can be used to send messages to the component
     link: ComponentLink<Model<bool>>,
     value: i64,
-    leds: [T; 3072]
+    leds: [T; LED_COUNT],
+    panel_horizontal_offset: usize,
+    panel_vertical_offset: usize,
 }
 
 impl Component for Model<bool> {
@@ -21,7 +29,9 @@ impl Component for Model<bool> {
         Self {
             link,
             value: 0,
-            leds: [false; 3072]
+            leds: [false; LED_COUNT],
+            panel_horizontal_offset: 0,
+            panel_vertical_offset: 0,
         }
     }
 
@@ -31,16 +41,19 @@ impl Component for Model<bool> {
                 self.value += 1;
                 let y = x as usize;
                 self.leds[y] = !self.leds[y];
-                ConsoleService::log(&x.to_string());
-                ConsoleService::log(":");
+                ConsoleService::log(&x.to_string());               
                 if self.leds[y] == false {
                     ConsoleService::log("false");
                 }
                 else {
                     ConsoleService::log("true"); 
                 }
-                
-                
+                let finalx = x as usize % MATRIX_WIDTH + MATRIX_WIDTH * self.panel_horizontal_offset * MATRIX_WIDTH;
+                let finaly = x as usize / MATRIX_WIDTH + self.panel_vertical_offset * MATRIX_HEIGHT;
+                ConsoleService::log(&finalx.to_string());
+                ConsoleService::log(&finaly.to_string());
+                //ConsoleService::log(&self.panel_vertical_offset.to_string());                
+                //ConsoleService::log(&LED_COUNT.to_string());
                 // the value has changed so we need to
                 // re-render for it to appear on the page
                 false
