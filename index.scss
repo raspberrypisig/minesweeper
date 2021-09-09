@@ -32,9 +32,9 @@
     transition: all 400ms linear;
   }
 
-  $columns: 256;
+  $columns: 255;
 
-  @for $i from 1 through $columns {
+  @for $i from 0 through $columns {
     #c#{$i}:checked ~ .grid #s#{$i} {        
         background-color: green;    
         margin: 0px;  
