@@ -7,6 +7,16 @@
     grid-template-rows: auto;
     
   }
+
+.buttons {
+  max-width: 800px;
+  margin: 30px auto;
+  box-sizing: border-box;
+
+  button {
+    width: 6rem;
+  }
+}
   
 .grid__item::before {
     content: "";
@@ -66,6 +76,8 @@
     left: -99px;
   }
   
-  
+  .selected {
+    color: red;
+  }
   
   

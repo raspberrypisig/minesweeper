@@ -9,6 +9,7 @@ const LED_COUNT: usize = MATRIX_WIDTH * MATRIX_HEIGHT * PANEL_WIDTH * PANEL_HEIG
 
 enum Msg {
     CellClicked(u16),
+    SwitchSegment(usize),
 }
 
 struct Model<T> {
@@ -19,6 +20,7 @@ struct Model<T> {
     leds: [T; LED_COUNT],
     panel_horizontal_offset: usize,
     panel_vertical_offset: usize,
+    current_segment: usize,
 }
 
 impl Component for Model<bool> {
@@ -32,6 +34,7 @@ impl Component for Model<bool> {
             leds: [false; LED_COUNT],
             panel_horizontal_offset: 0,
             panel_vertical_offset: 0,
+            current_segment: 1,
         }
     }
 
@@ -58,6 +61,17 @@ impl Component for Model<bool> {
                 // re-render for it to appear on the page
                 false
             }
+
+            Msg::SwitchSegment(x) => {
+                self.current_segment = x;
+                self.panel_horizontal_offset = (x - 1) % PANEL_WIDTH;
+                self.panel_vertical_offset = (x - 1) / PANEL_WIDTH;
+                ConsoleService::log(&x.to_string());
+                ConsoleService::log(&self.panel_horizontal_offset.to_string());
+                ConsoleService::log(&self.panel_vertical_offset.to_string());
+
+                true
+            }
         }
     }
 
@@ -71,6 +85,8 @@ impl Component for Model<bool> {
     fn view(&self) -> Html {
         let hiddencells = (0..256).map(|i| self.view_hidden_checkbox(i));
         let cells = (0..256).map(|i| self.view_minesweeper_cell(i));
+        let buttons_top = (1..7).map(|i| self.section_buttons(i));
+        let buttons_bottom = (7..13).map(|i| self.section_buttons(i));
         html! {
             <div>
              { for hiddencells }
@@ -78,6 +94,15 @@ impl Component for Model<bool> {
              <div id="board" class="grid">
                { for cells }
              </div>
+
+            <div class="buttons">
+              {for buttons_top}
+            </div>
+
+            <div class="buttons">
+              {for buttons_bottom}
+            </div>
+
              </div>
         }
 }
@@ -102,6 +127,24 @@ impl Model<bool> {
       html!{
         <label id=maybe_id class="grid__item" for=for_id></label>
       }
+    }
+
+    fn selected_button(&self, idx: usize) -> Option<String>{
+        if idx == self.current_segment {
+            Some("selected".to_string())
+        }
+        else {
+        None
+        }
+
+       
+    }
+ 
+    fn section_buttons(&self, idx: usize) -> Html {
+        let buttonid = Some(format!("b{}", idx));
+        html!{
+            <button id=buttonid class=self.selected_button(idx) onclick=self.link.callback(move |_| Msg::SwitchSegment(idx) ) >{idx.to_string()}</button>
+        }
     }
 }
 
